@@ -1,0 +1,17 @@
+package my.test;
+
+import java.util.List;
+
+public Foo {
+
+    private List<String> bar;
+
+    public void setBar(final List<String> bar) {
+      this.bar = bar;
+    }
+
+    public List<String> getBar() {
+      return bar;
+    }	
+
+}

@@ -1,0 +1,15 @@
+package my.test;
+
+public Foo {
+
+    private java.util.List<java.lang.String> bar;
+
+    public void setBar(final java.util.List<java.lang.String> bar) {
+      this.bar = bar;
+    }
+
+    public java.util.List<java.lang.String> getBar() {
+      return bar;
+    }	
+
+}
