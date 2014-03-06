@@ -10,7 +10,7 @@ public class Names {
 
 	public static String getClassName(final String name) throws ModelException {
 		final String className = StringUtils.remove(
-				WordUtils.capitalizeFully(StringUtils.trimToNull(name)), " ");
+				WordUtils.capitalize(StringUtils.trimToNull(name)), " ");
 		log.debug("name={}, className={}", name, className);
 		return className;
 	}

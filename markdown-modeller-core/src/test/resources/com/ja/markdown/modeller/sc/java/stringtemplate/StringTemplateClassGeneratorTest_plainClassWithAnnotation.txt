@@ -1,0 +1,8 @@
+package test;
+
+@a.b.MyAnnotation
+public class Foo {
+
+
+
+}

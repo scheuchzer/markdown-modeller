@@ -12,6 +12,6 @@ public Foo {
 
     public List<String> getBar() {
       return bar;
-    }	
+    }
 
 }

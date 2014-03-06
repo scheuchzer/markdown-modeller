@@ -1,7 +1,12 @@
 package my.test;
 
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+
 public Foo {
 
+    @Id
+    @GeneratedValue
     private String bar;
 
     public void setBar(final String bar) {

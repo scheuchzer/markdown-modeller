@@ -1,0 +1,10 @@
+package test;
+
+public class Foo {
+
+    @a.b.MyAnnotation
+    private java.lang.String bar;
+
+
+
+}

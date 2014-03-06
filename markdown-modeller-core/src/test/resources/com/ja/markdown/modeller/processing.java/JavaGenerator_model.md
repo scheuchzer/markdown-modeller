@@ -27,4 +27,7 @@ This is a simple test project. This section is just for documentation and is not
 
 ## Source Code
 ### Java
+#### JPA
+#### Hibernate
+#### Lombok
   

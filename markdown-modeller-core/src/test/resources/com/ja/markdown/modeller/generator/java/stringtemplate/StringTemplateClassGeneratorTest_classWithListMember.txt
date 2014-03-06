@@ -10,6 +10,6 @@ public Foo {
 
     public java.util.List<java.lang.String> getBar() {
       return bar;
-    }	
+    }
 
 }
