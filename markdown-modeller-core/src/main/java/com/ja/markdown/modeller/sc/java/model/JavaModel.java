@@ -7,10 +7,11 @@ import lombok.Data;
 
 @Data
 public class JavaModel {
-
+	// TODO: Merge with JavaProject!
 	private final JavaProject project;
 
 	private final Set<JavaClass> classes = new HashSet<>();
+	private final Set<JavaClass> testClasses = new HashSet<>();
 
 	public JavaModel(final JavaProject project) {
 		this.project = project;
@@ -28,5 +29,13 @@ public class JavaModel {
 					+ jc.getName());
 		}
 		classes.add(jc);
+	}
+
+	public void addTest(final JavaClass jc) {
+		if (testClasses.contains(jc)) {
+			throw new IllegalArgumentException("Class already registered. "
+					+ jc.getName());
+		}
+		testClasses.add(jc);
 	}
 }

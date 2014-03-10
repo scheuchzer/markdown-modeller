@@ -1,4 +1,4 @@
-package com.ja.markdown.modeller.sc.java;
+package com.ja.markdown.modeller.sc.java.maven;
 
 import org.junit.Test;
 
@@ -7,11 +7,15 @@ import com.ja.markdown.modeller.model.ModelClass;
 import com.ja.markdown.modeller.model.ModelClassMember;
 import com.ja.markdown.modeller.model.ModelException;
 import com.ja.markdown.modeller.model.Project;
+import com.ja.markdown.modeller.sc.java.jpa.JpaModelEnhancer;
+import com.ja.markdown.modeller.sc.java.lombok.LombokEnhancer;
+import com.ja.markdown.modeller.sc.java.model.JavaProject;
+import com.ja.markdown.modeller.sc.java.stringtemplate.StringTemplateGenerator;
 
-public class JavaSourceCodeTest {
+public class MavenGeneratorTest {
 
 	@Test
-	public void testExecute() throws ModelException {
+	public void execute() throws ModelException {
 		final Project project = new Project();
 		project.setTitle("My Project");
 		project.setAkaName("my-proj");
@@ -28,6 +32,13 @@ public class JavaSourceCodeTest {
 		foo.add(ModelClassMember.create("type: FooType"));
 		domainModel.addMasterData(fooType);
 		domainModel.addBusinessObjectClass(foo);
-		new JavaSourceCode().execute(project);
+
+		final JavaProject javaProject = new JavaProject(project);
+		new JpaModelEnhancer().execute(javaProject);
+		new LombokEnhancer().execute(javaProject);
+		new StringTemplateGenerator().execute(javaProject);
+
+		final MavenGenerator generator = new MavenGenerator();
+		generator.execute(javaProject);
 	}
 }

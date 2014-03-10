@@ -11,7 +11,7 @@ public class JavaDependency {
 	};
 
 	private String groupId;
-	private String artefactId;
+	private String artifactId;
 	private String version;
 	private Scope scope;
 
@@ -40,9 +40,11 @@ public class JavaDependency {
 		}
 		final JavaDependency dep = new JavaDependency();
 		dep.setGroupId(tokens[0]);
-		dep.setArtefactId(tokens[1]);
+		dep.setArtifactId(tokens[1]);
 		dep.setVersion(tokens[2]);
-		dep.setScope(scope);
+		if (!Scope.compile.equals(scope)) {
+			dep.setScope(scope);
+		}
 		return dep;
 	}
 }

@@ -20,7 +20,7 @@ public class StringTemplateClassGeneratorTest {
 		final String expectedCode = Resources.asString(this, "plainClass.txt");
 		final JavaClass fooClass = new JavaClass("test.Foo");
 
-		final String actualCode = new StringTemplateClassGenerator()
+		final String actualCode = new StringTemplateGenerator()
 				.generateClass(fooClass);
 		System.out.println(actualCode);
 		assertThat(actualCode, is(expectedCode));
@@ -33,7 +33,7 @@ public class StringTemplateClassGeneratorTest {
 		final JavaClass jc = new JavaClass("test.Foo");
 		jc.add(new JavaAnnotation(new JavaClass("a.b.MyAnnotation")));
 
-		final String actualCode = new StringTemplateClassGenerator()
+		final String actualCode = new StringTemplateGenerator()
 				.generateClass(jc);
 		System.out.println(actualCode);
 		assertThat(actualCode, is(expectedCode));
@@ -50,7 +50,7 @@ public class StringTemplateClassGeneratorTest {
 		jc.getMembers().get(0)
 				.add(new JavaAnnotation(new JavaClass("a.b.MyAnnotation")));
 
-		final String actualCode = new StringTemplateClassGenerator()
+		final String actualCode = new StringTemplateGenerator()
 				.generateClass(jc);
 		System.out.println(actualCode);
 		assertThat(actualCode, is(expectedCode));
@@ -66,7 +66,7 @@ public class StringTemplateClassGeneratorTest {
 		jc.getMembers().get(0).setClassType(JdkClass.String.instance());
 		jc.getMembers().get(0).setWithGetter(true);
 		jc.getMembers().get(0).setWithSetter(true);
-		final String actualCode = new StringTemplateClassGenerator()
+		final String actualCode = new StringTemplateGenerator()
 				.generateClass(jc);
 		System.out.println(actualCode);
 		assertThat(actualCode, is(expectedCode));
@@ -85,7 +85,7 @@ public class StringTemplateClassGeneratorTest {
 		jc.getMembers().get(0).setWithSetter(true);
 		jc.getMembers().get(0).getClassType().setImported(true);
 		jc.importClass(JdkClass.String.instance());
-		final String actualCode = new StringTemplateClassGenerator()
+		final String actualCode = new StringTemplateGenerator()
 				.generateClass(jc);
 		System.out.println(actualCode);
 		assertThat(actualCode, is(expectedCode));
@@ -102,7 +102,7 @@ public class StringTemplateClassGeneratorTest {
 		jc.getMembers().get(0).setGenericType(JdkClass.String.instance());
 		jc.getMembers().get(0).setWithGetter(true);
 		jc.getMembers().get(0).setWithSetter(true);
-		final String actualCode = new StringTemplateClassGenerator()
+		final String actualCode = new StringTemplateGenerator()
 				.generateClass(jc);
 		System.out.println(actualCode);
 		assertThat(actualCode, is(expectedCode));
@@ -124,7 +124,7 @@ public class StringTemplateClassGeneratorTest {
 		jc.getMembers().get(0).getGenericType().setImported(true);
 		jc.importClass(JdkClass.String.instance());
 		jc.importClass(JdkClass.List.instance());
-		final String actualCode = new StringTemplateClassGenerator()
+		final String actualCode = new StringTemplateGenerator()
 				.generateClass(jc);
 		System.out.println(actualCode);
 		assertThat(actualCode, is(expectedCode));

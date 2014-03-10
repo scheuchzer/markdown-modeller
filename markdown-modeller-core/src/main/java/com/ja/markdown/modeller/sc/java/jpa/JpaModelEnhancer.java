@@ -6,21 +6,65 @@ import com.ja.markdown.modeller.sc.java.JavaModelPlugin;
 import com.ja.markdown.modeller.sc.java.JdkClass;
 import com.ja.markdown.modeller.sc.java.model.JavaAnnotation;
 import com.ja.markdown.modeller.sc.java.model.JavaClass;
+import com.ja.markdown.modeller.sc.java.model.JavaDependency;
 import com.ja.markdown.modeller.sc.java.model.JavaDomainModel;
 import com.ja.markdown.modeller.sc.java.model.JavaMember;
 import com.ja.markdown.modeller.sc.java.model.JavaModel;
 import com.ja.markdown.modeller.sc.java.model.JavaProject;
+import com.ja.markdown.modeller.sc.java.model.PersistenceXml;
+import com.ja.markdown.modeller.sc.java.model.Resource;
 
 public class JpaModelEnhancer implements JavaModelPlugin {
 
 	@Override
 	public void execute(final JavaProject project) {
-		// project.add(JavaDependency.provided(dependency));
+		project.add(JavaDependency.test("org.hamcrest:hamcrest-all:1.3"));
+
 		final JavaDomainModel pojoModel = project.getJavaModel()
 				.cloneDomainModel("entity");
 
-		enhance(project.getJavaModel(), pojoModel.getMasterDataClasses());
+		enhanceMasterData(project.getJavaModel(),
+				pojoModel.getMasterDataClasses());
 		enhance(project.getJavaModel(), pojoModel.getBusinessDataClasses());
+
+		project.addMetaInfResource(createPersistenceXml());
+		project.addTestMetaInfResource(createTestPersistenceXml(project));
+	}
+
+	private Resource createPersistenceXml() {
+		final PersistenceXml persistenceXml = new PersistenceXml();
+		persistenceXml.setUnitName("unit");
+		persistenceXml.setTransactionType("JTA");
+		persistenceXml.setJtaDataSource("java:comp/DefaultDataSource");
+		return persistenceXml;
+	}
+
+	private Resource createTestPersistenceXml(final JavaProject project) {
+		final PersistenceXml persistenceXml = new PersistenceXml();
+		persistenceXml.setUnitName("unit");
+		persistenceXml.setTransactionType("RESOURCE_LOCAL");
+		for (final JavaClass jc : project.getJavaModel().getClasses()) {
+			if (jc.getName().contains(".entity.")) {
+				persistenceXml.add(jc);
+			}
+		}
+		final JpaProperties props = new JpaProperties(persistenceXml);
+		props.setDriver("org.h2.Driver");
+		props.setUrl("jdbc:h2:file:test.db");
+		props.setUser("sa");
+		props.setPassword("");
+		return persistenceXml;
+	}
+
+	private void enhanceMasterData(final JavaModel javaModel,
+			final List<JavaClass> classes) {
+		for (final JavaClass jc : classes) {
+			enhance(jc);
+			final JpaMasterDataTestClass test = new JpaMasterDataTestClass(jc);
+			javaModel.addTest(test);
+			javaModel.add(jc);
+		}
+
 	}
 
 	private void enhance(final JavaModel javaModel,

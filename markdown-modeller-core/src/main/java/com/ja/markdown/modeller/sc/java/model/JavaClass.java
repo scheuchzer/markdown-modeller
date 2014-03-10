@@ -15,23 +15,20 @@ import com.ja.markdown.modeller.model.ModelClass;
 import com.ja.markdown.modeller.model.ModelClassMember;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class JavaClass extends JavaBase {
-
-	private final String name;
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+@ToString(callSuper = true, doNotUseGetters = true)
+public class JavaClass extends TextResource {
 
 	private final List<JavaAnnotation> annotations = new ArrayList<>();
 	private final List<JavaMethod> methods = new ArrayList<>();
 	private final List<JavaMember> members = new ArrayList<>();
 	private final Set<JavaClass> imports = new HashSet<>();
 	private final ModelClass model;
-	private String sourceCode;
 	private boolean imported;
 
 	public JavaClass(final String pkg, final ModelClass model) {
 		this.model = model;
-		this.name = pkg + "." + model.getName();
+		setName(pkg + "." + model.getName());
 		for (final ModelClassMember mcm : model.getMembers()) {
 			members.add(new JavaMember(mcm));
 		}
@@ -48,16 +45,16 @@ public class JavaClass extends JavaBase {
 	}
 
 	public JavaClass(final String name) {
-		this.name = name;
+		setName(name);
 		this.model = null;
 	}
 
 	public String getPackage() {
-		return StringUtils.substringBeforeLast(name, ".");
+		return StringUtils.substringBeforeLast(getName(), ".");
 	}
 
 	public String getSimpleName() {
-		return StringUtils.substringAfterLast(name, ".");
+		return StringUtils.substringAfterLast(getName(), ".");
 	}
 
 	public void add(final JavaAnnotation annotation) {
@@ -75,4 +72,10 @@ public class JavaClass extends JavaBase {
 	public void addAnnotation(final JavaAnnotation javaAnnotation) {
 		annotations.add(javaAnnotation);
 	}
+
+	@Override
+	public String getFileName() {
+		return getName().replace(".", "/") + ".java";
+	}
+
 }
