@@ -38,4 +38,14 @@ public class JavaModel {
 		}
 		testClasses.add(jc);
 	}
+
+	public Set<JavaClass> getClasses(final String filter) {
+		final Set<JavaClass> filtered = new HashSet<>();
+		for (final JavaClass jc : classes) {
+			if (jc.getName().contains(filter)) {
+				filtered.add(jc);
+			}
+		}
+		return filtered;
+	}
 }

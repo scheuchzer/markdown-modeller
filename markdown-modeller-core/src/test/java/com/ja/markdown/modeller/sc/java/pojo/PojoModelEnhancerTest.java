@@ -65,8 +65,10 @@ public class PojoModelEnhancerTest {
 		final JavaMember actualMember = actualClass.getMembers().get(0);
 		final JavaClassFactory jcf = new JavaClassFactory("com.ja.test.pojo");
 		assertThat(actualMember.getName(), is("foo"));
-		assertThat(actualMember.getClassType(), is(jcf.resolve("List")));
-		assertThat(actualMember.getGenericType(), is(jcf.resolve("String")));
+		assertThat(actualMember.getClassType().getName(), is(jcf
+				.resolve("List").getName()));
+		assertThat(actualMember.getClassType().getGenericType(),
+				is(jcf.resolve("String")));
 		assertThat(actualMember.isWithGetter(), is(true));
 		assertThat(actualMember.isWithSetter(), is(true));
 

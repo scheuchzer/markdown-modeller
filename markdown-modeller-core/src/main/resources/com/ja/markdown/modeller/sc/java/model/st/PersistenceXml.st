@@ -6,6 +6,7 @@ PersistenceXml(model) ::= <<
    \<persistence-unit name="<model.unitName>" transaction-type="<model.transactionType>"\>
       <model.classes:{c|\<class\><c.name>\</class\>
       }>
+      <if(model.jtaDataSource)>\<jta-data-source\><model.jtaDataSource>\</jta-data-source\><endif>
       \<exclude-unlisted-classes\><model.excludeUnlistedClasses>\</exclude-unlisted-classes\>
       \<properties\>
          <model.properties:{prop|

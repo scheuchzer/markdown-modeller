@@ -13,6 +13,7 @@ import org.stringtemplate.v4.STGroupDir;
 
 import com.ja.markdown.modeller.model.ModelException;
 import com.ja.markdown.modeller.sc.java.JavaModelPlugin;
+import com.ja.markdown.modeller.sc.java.maven.model.MavenPlugin;
 import com.ja.markdown.modeller.sc.java.maven.model.MavenProfile;
 import com.ja.markdown.modeller.sc.java.maven.model.MavenProject;
 import com.ja.markdown.modeller.sc.java.model.JavaProject;
@@ -28,8 +29,20 @@ public class MavenGenerator implements JavaModelPlugin {
 		mavenProject.setGroupId(project.getProjectPackage());
 		mavenProject.setArtifactId(project.getProject().getAkaName());
 		mavenProject.setVersion("0.0.1-SNAPSHOT");
-		mavenProject.getJavaProject().add(Dependency.h2.test());
+		mavenProject.getJavaProject().add(Dependency.h2.compile());
 		mavenProject.getJavaProject().add(Dependency.junit.test());
+		mavenProject.getJavaProject().add(Dependency.slf4jApi.compile());
+
+		final MavenPlugin compilerPlugin = Plugin.compiler.instance();
+		compilerPlugin.getConfiguration().add("source", "1.7");
+		compilerPlugin.getConfiguration().add("target", "1.7");
+		mavenProject.add(compilerPlugin);
+
+		if ("war".equals(project.getPackaging())) {
+			final MavenPlugin warPlugin = Plugin.war.instance();
+			warPlugin.getConfiguration().add("failOnMissingWebXml", "false");
+			mavenProject.add(warPlugin);
+		}
 
 		final MavenProfile profileHibernate = new MavenProfile();
 		profileHibernate.setId("hiberate");
@@ -51,7 +64,7 @@ public class MavenGenerator implements JavaModelPlugin {
 		final ST st = group.getInstanceOf("pom");
 		st.add("project", mavenProject);
 		final String pomXml = st.render();
-		log.info("Generated code:\n{}", pomXml);
+		log.debug("Generated code:\n{}", pomXml);
 
 		final File projectDir = new File(mavenProject.getJavaProject()
 				.getProject().getOutputFolder(), mavenProject.getArtifactId());
@@ -65,6 +78,8 @@ public class MavenGenerator implements JavaModelPlugin {
 				new File(projectDir, "src/main/resources"));
 		mavenProject.getJavaProject().setTestResourcesOutputFolder(
 				new File(projectDir, "src/test/resources"));
+		mavenProject.getJavaProject().setWebappOutputFolder(
+				new File(projectDir, "src/main/webapp/"));
 		new FileSourceCodeWriter().execute(mavenProject.getJavaProject());
 
 		log.info("Writing: {}", pomFile.getAbsolutePath());

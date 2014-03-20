@@ -19,19 +19,27 @@ import com.ja.markdown.modeller.model.ModelClassMember;
 @ToString(callSuper = true, doNotUseGetters = true)
 public class JavaClass extends TextResource {
 
+	private final JavaClass extendsType;
 	private final List<JavaAnnotation> annotations = new ArrayList<>();
 	private final List<JavaMethod> methods = new ArrayList<>();
 	private final List<JavaMember> members = new ArrayList<>();
 	private final Set<JavaClass> imports = new HashSet<>();
 	private final ModelClass model;
+	private JavaClass genericType;
+
 	private boolean imported;
 
 	public JavaClass(final String pkg, final ModelClass model) {
 		this.model = model;
+		this.extendsType = null;
 		setName(pkg + "." + model.getName());
 		for (final ModelClassMember mcm : model.getMembers()) {
 			members.add(new JavaMember(mcm));
 		}
+	}
+
+	public boolean isGeneric() {
+		return genericType != null;
 	}
 
 	/**
@@ -45,8 +53,13 @@ public class JavaClass extends TextResource {
 	}
 
 	public JavaClass(final String name) {
+		this(name, (JavaClass) null);
+	}
+
+	public JavaClass(final String name, final JavaClass extendsType) {
 		setName(name);
 		this.model = null;
+		this.extendsType = extendsType;
 	}
 
 	public String getPackage() {
@@ -61,6 +74,10 @@ public class JavaClass extends TextResource {
 		annotations.add(annotation);
 	}
 
+	public void add(final JavaMethod method) {
+		methods.add(method);
+	}
+
 	public void importClass(final JavaClass jc) {
 		imports.add(jc);
 	}
@@ -69,13 +86,20 @@ public class JavaClass extends TextResource {
 		return imported ? getSimpleName() : getName();
 	}
 
-	public void addAnnotation(final JavaAnnotation javaAnnotation) {
-		annotations.add(javaAnnotation);
+	public String getCamelCaseSimpleName() {
+		char c = getSimpleName().charAt(0);
+		c = Character.toLowerCase(c);
+		return c + getSimpleName().substring(1);
 	}
 
 	@Override
 	public String getFileName() {
 		return getName().replace(".", "/") + ".java";
+	}
+
+	public void add(final JavaMember dao) {
+		members.add(dao);
+
 	}
 
 }

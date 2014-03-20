@@ -14,7 +14,6 @@ public class JavaMember {
 
 	private String name;
 	private JavaClass classType;
-	private JavaClass genericType;
 	private boolean withSetter;
 	private boolean withGetter;
 
@@ -28,8 +27,13 @@ public class JavaMember {
 		this.name = mcm.getName();
 	}
 
+	public JavaMember(final String name) {
+		this.modelClassMember = null;
+		this.name = name;
+	}
+
 	public boolean isGeneric() {
-		return genericType != null;
+		return classType.isGeneric();
 	}
 
 	public String getNameForMethod() {

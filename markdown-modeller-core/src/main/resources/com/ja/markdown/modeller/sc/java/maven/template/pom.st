@@ -6,6 +6,7 @@ pom(project) ::= <<
     \<groupId\><project.groupId>\</groupId\>
     \<artifactId\><project.artifactId>\</artifactId\>
     \<version\><project.version>\</version\>
+    \<packaging\><project.javaProject.packaging>\</packaging\>
     
     \<properties\>
       \<project.build.sourceEncoding\>UTF-8\</project.build.sourceEncoding\>
@@ -43,22 +44,24 @@ pom(project) ::= <<
     \<build\>
       \<pluginManagement\>
         \<plugins\>
+          <project.plugins:{p|
           \<plugin\>
-            \<groupId\>org.apache.maven.plugins\</groupId\>
-            \<artifactId\>maven-compiler-plugin\</artifactId\>
-            \<version\>3.1\</version\>
-          \</plugin\>
+            \<groupId\><p.groupId>\</groupId\>
+            \<artifactId\><p.artifactId>\</artifactId\>
+            \<version\><p.version>\</version\>
+          \</plugin\>}>
         \</plugins\>
       \</pluginManagement\>
       \<plugins\>
-        \<plugin\>
-          \<groupId\>org.apache.maven.plugins\</groupId\>
-          \<artifactId\>maven-compiler-plugin\</artifactId\>
-          \<configuration\>
-            \<source\>1.7\</source\>
-            \<target\>1.7\</target\>
-          \</configuration\>
-        \</plugin\>
+        <project.plugins:{p|
+      \<plugin\>
+        \<groupId\><p.groupId>\</groupId\>
+        \<artifactId\><p.artifactId>\</artifactId\>
+        \<configuration\>
+        <p.configuration.items:{c|
+      \<<c.key>\><c.value>\</<c.key>\>
+        }>  \</configuration\>
+        \</plugin\>}>
       \</plugins\>
     \</build\>
 \</project\>

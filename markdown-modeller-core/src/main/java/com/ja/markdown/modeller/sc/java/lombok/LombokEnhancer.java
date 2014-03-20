@@ -15,8 +15,7 @@ public class LombokEnhancer implements JavaModelPlugin {
 	public void execute(final JavaProject project) {
 		project.add(JavaDependency.provided("org.projectlombok:lombok:1.12.4"));
 		for (final JavaClass jc : project.getJavaModel().getClasses()) {
-			jc.addAnnotation(new JavaAnnotation(new JavaClass(Data.class
-					.getName())));
+			jc.add(new JavaAnnotation(new JavaClass(Data.class.getName())));
 			for (final JavaMember m : jc.getMembers()) {
 				m.setWithGetter(false);
 				m.setWithSetter(false);

@@ -23,6 +23,6 @@ public class EclipseLinkModelEnhancer implements JavaModelPlugin {
 		}
 		final EclipseLinkProperties props = new EclipseLinkProperties(
 				persistenceXml);
-		props.setTableGeneration("create");
+		props.setTableGeneration("create-or-extend-tables");
 	}
 }

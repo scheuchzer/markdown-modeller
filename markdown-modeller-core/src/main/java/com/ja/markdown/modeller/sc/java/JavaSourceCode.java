@@ -11,6 +11,7 @@ import com.ja.markdown.modeller.sc.java.lombok.LombokEnhancer;
 import com.ja.markdown.modeller.sc.java.maven.MavenGenerator;
 import com.ja.markdown.modeller.sc.java.model.JavaProject;
 import com.ja.markdown.modeller.sc.java.pojo.PojoModelEnhancer;
+import com.ja.markdown.modeller.sc.java.rest.RestModelEnhancer;
 import com.ja.markdown.modeller.sc.java.stringtemplate.StringTemplateGenerator;
 
 public class JavaSourceCode {
@@ -22,8 +23,8 @@ public class JavaSourceCode {
 		final List<? extends JavaModelPlugin> plugins = Arrays.asList(
 				new PojoModelEnhancer(), new JpaModelEnhancer(),
 				new HibernateModelEnhancer(), new EclipseLinkModelEnhancer(),
-				new LombokEnhancer(), new ImportsEnhancer(),
-				new StringTemplateGenerator(),
+				new RestModelEnhancer(), new LombokEnhancer(),
+				new ImportsEnhancer(), new StringTemplateGenerator(),
 				// new FileSourceCodeWriter(),
 				new MavenGenerator());
 

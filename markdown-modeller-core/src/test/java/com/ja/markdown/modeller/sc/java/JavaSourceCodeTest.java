@@ -22,11 +22,15 @@ public class JavaSourceCodeTest {
 		final ModelClass fooType = ModelClass.create("FooType");
 		fooType.add(ModelClassMember.create("id: Long"));
 		fooType.add(ModelClassMember.create("name: String"));
+		final ModelClass barType = ModelClass.create("BarType");
+		barType.add(ModelClassMember.create("id: Long"));
+		barType.add(ModelClassMember.create("name: String"));
 		final ModelClass foo = ModelClass.create("Foo");
 		foo.add(ModelClassMember.create("id: Long"));
 		foo.add(ModelClassMember.create("name: String"));
 		foo.add(ModelClassMember.create("type: FooType"));
 		domainModel.addMasterData(fooType);
+		domainModel.addMasterData(barType);
 		domainModel.addBusinessObjectClass(foo);
 		new JavaSourceCode().execute(project);
 	}

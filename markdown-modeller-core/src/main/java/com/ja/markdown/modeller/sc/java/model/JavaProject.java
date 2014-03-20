@@ -23,11 +23,15 @@ public class JavaProject {
 
 	private Set<Resource> metaInfResources = new HashSet<>();
 	private Set<Resource> testMetaInfResources = new HashSet<>();
+	private Set<Resource> webappOutputResources = new HashSet<>();
 
 	private File classesOutputFolder;
 	private File testClassesOutputFolder;
 	private File resourcesOutputFolder;
 	private File testResourcesOutputFolder;
+	private File webappOutputFolder;
+
+	private String packaging = "jar";
 
 	public JavaProject(final Project project) {
 		this.project = project;
@@ -55,6 +59,10 @@ public class JavaProject {
 	public void add(final JavaDependency dependency) {
 		dependencies.add(dependency);
 
+	}
+
+	public void addWebappResource(final Resource resource) {
+		webappOutputResources.add(resource);
 	}
 
 	public void addMetaInfResource(final Resource resource) {

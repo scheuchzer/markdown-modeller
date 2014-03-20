@@ -16,7 +16,7 @@ import java.util.List;
 public class <model.simpleName> {
 
   @Test
-  public void test() {
+  public void testPersistAndQuery() {
     final EntityManagerFactory emf = Persistence
       .createEntityManagerFactory("unit");
     final EntityManager em = emf.createEntityManager();

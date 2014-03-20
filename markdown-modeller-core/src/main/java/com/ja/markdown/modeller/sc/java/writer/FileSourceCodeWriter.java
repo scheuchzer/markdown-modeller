@@ -26,6 +26,8 @@ public class FileSourceCodeWriter implements JavaModelPlugin {
 		write(project.getMetaInfResources(), project.getResourcesOutputFolder());
 		write(project.getTestMetaInfResources(),
 				project.getTestResourcesOutputFolder());
+		write(project.getWebappOutputResources(),
+				project.getWebappOutputFolder());
 	}
 
 	private void write(final Set<? extends Resource> resources,

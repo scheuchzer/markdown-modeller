@@ -39,8 +39,9 @@ public class JavaDomainModelCloner {
 		for (final JavaMember m : jc.getMembers()) {
 			m.setClassType(javaClassFactory.resolve(m.getModelClassMember()
 					.getType()));
-			m.setGenericType(javaClassFactory.resolve(m.getModelClassMember()
-					.getGenericType()));
+			m.getClassType().setGenericType(
+					javaClassFactory.resolve(m.getModelClassMember()
+							.getGenericType()));
 		}
 
 	}

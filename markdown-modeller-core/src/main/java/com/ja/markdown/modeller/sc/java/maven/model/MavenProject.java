@@ -35,4 +35,8 @@ public class MavenProject extends JavaBase {
 		profiles.add(profile);
 	}
 
+	public void add(final MavenPlugin plugin) {
+		plugins.add(plugin);
+	}
+
 }

@@ -8,7 +8,8 @@ public enum Dependency {
 			"org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final"), hibernateEntityManager(
 			"org.hibernate:hibernate-entitymanager:4.3.4.Final"), junit(
 			"junit:junit:4.11"), eclipseLink(
-			"org.eclipse.persistence: org.eclipse.persistence.jpa:2.5.1");
+			"org.eclipse.persistence: org.eclipse.persistence.jpa:2.5.1"), javaeeApi(
+			"javax:javaee-api:7.0"), slf4jApi("org.slf4j:slf4j-api:1.7.6");
 
 	private String dependency;
 
