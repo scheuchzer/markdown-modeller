@@ -3,6 +3,8 @@ package com.ja.markdown.modeller.sc.java.maven;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,6 +19,7 @@ import com.ja.markdown.modeller.sc.java.maven.model.MavenPlugin;
 import com.ja.markdown.modeller.sc.java.maven.model.MavenProfile;
 import com.ja.markdown.modeller.sc.java.maven.model.MavenProject;
 import com.ja.markdown.modeller.sc.java.model.JavaProject;
+import com.ja.markdown.modeller.sc.java.querydsl.QueryDslModelEnhancer;
 import com.ja.markdown.modeller.sc.java.writer.FileSourceCodeWriter;
 
 @Slf4j
@@ -32,6 +35,12 @@ public class MavenGenerator implements JavaModelPlugin {
 		mavenProject.getJavaProject().add(Dependency.h2.compile());
 		mavenProject.getJavaProject().add(Dependency.junit.test());
 		mavenProject.getJavaProject().add(Dependency.slf4jApi.compile());
+
+		final List<MavenModelPlugin> plugins = new ArrayList<>();
+		plugins.add(new QueryDslModelEnhancer());
+		for (final MavenModelPlugin p : plugins) {
+			p.execute(mavenProject);
+		}
 
 		final MavenPlugin compilerPlugin = Plugin.compiler.instance();
 		compilerPlugin.getConfiguration().add("source", "1.7");
@@ -60,7 +69,7 @@ public class MavenGenerator implements JavaModelPlugin {
 		log.info("Creating: pom.xml");
 		final STGroup group = new STGroupDir(getClass().getPackage().getName()
 				.replace(".", "/")
-				+ "/template");
+				+ "/template", "UTF-8", '$', '$');
 		final ST st = group.getInstanceOf("pom");
 		st.add("project", mavenProject);
 		final String pomXml = st.render();

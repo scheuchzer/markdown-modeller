@@ -27,6 +27,8 @@ public class MavenProject extends JavaBase {
 
 	private Set<MavenProfile> profiles = new HashSet<>();
 
+	private Set<Resource> resources = new HashSet<>();
+
 	public MavenProject(final JavaProject javaProject) {
 		this.javaProject = javaProject;
 	}
@@ -39,4 +41,7 @@ public class MavenProject extends JavaBase {
 		plugins.add(plugin);
 	}
 
+	public void add(final Resource resource) {
+		resources.add(resource);
+	}
 }

@@ -1,5 +1,8 @@
 package com.ja.markdown.modeller.sc.java.maven.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Data;
 
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +14,9 @@ public class MavenPlugin {
 	private String artifactId;
 	private String version;
 
-	private PluginConfiguratoin configuration = new PluginConfiguratoin();
+	private final PluginConfiguratoin configuration = new PluginConfiguratoin();
+
+	private final List<Execution> executions = new ArrayList<>();
 
 	public static MavenPlugin create(final String definition) {
 		final String[] tokens = StringUtils.split(definition, ":");
@@ -24,5 +29,9 @@ public class MavenPlugin {
 		plugin.setArtifactId(tokens[1]);
 		plugin.setVersion(tokens[2]);
 		return plugin;
+	}
+
+	public void add(final Execution e) {
+		executions.add(e);
 	}
 }
