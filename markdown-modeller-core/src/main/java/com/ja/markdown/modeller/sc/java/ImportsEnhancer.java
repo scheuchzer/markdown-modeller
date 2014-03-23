@@ -29,6 +29,9 @@ public class ImportsEnhancer implements JavaModelPlugin {
 	}
 
 	private void resolveImports(final JavaClass jc) {
+		for (final JavaClass usedClass : jc.getUsedClasses()) {
+			resolveImports(usedClass, jc);
+		}
 		resolveAnnotationImports(jc.getAnnotations(), jc);
 		resolveMemberImports(jc.getMembers(), jc);
 		resolveMethodImports(jc.getMethods(), jc);
@@ -47,11 +50,9 @@ public class ImportsEnhancer implements JavaModelPlugin {
 	private void resolveImports(final JavaMethod jm, final JavaClass owner) {
 		resolveAnnotationImports(jm.getAnnotations(), owner);
 		resolveImports(jm.getReturnType(), owner);
-		for (final JavaClass jc : jm.getUsedClasses()) {
-			resolveImports(jc, owner);
-		}
 		for (final JavaMethodParameter jmp : jm.getParameters()) {
 			resolveImports(jmp.getType(), owner);
+			resolveAnnotationImports(jmp.getAnnotations(), owner);
 		}
 	}
 

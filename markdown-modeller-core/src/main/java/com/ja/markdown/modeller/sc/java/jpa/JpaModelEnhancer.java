@@ -1,6 +1,11 @@
 package com.ja.markdown.modeller.sc.java.jpa;
 
+import static com.ja.markdown.modeller.sc.java.ejb.EjbClass.Singleton;
+import static com.ja.markdown.modeller.sc.java.ejb.EjbClass.Startup;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.ja.markdown.modeller.sc.java.JavaModelPlugin;
 import com.ja.markdown.modeller.sc.java.JdkClass;
@@ -35,10 +40,8 @@ public class JpaModelEnhancer implements JavaModelPlugin {
 
 		final JavaClass datasourceActivator = new JavaClass(
 				project.getProjectPackage() + ".DataSourceActivator");
-		datasourceActivator.add(new JavaAnnotation(new JavaClass(
-				"javax.ejb.Startup")));
-		datasourceActivator.add(new JavaAnnotation(new JavaClass(
-				"javax.ejb.Singleton")));
+		datasourceActivator.add(new JavaAnnotation(Startup.instance()));
+		datasourceActivator.add(new JavaAnnotation(Singleton.instance()));
 		final JavaAnnotation dsDef = new JavaAnnotation(new JavaClass(
 				"javax.annotation.sql.DataSourceDefinition"));
 		dsDef.addStringProperty("name", "java:global/jdbc/MyDataSource");
@@ -58,19 +61,24 @@ public class JpaModelEnhancer implements JavaModelPlugin {
 		final JavaMethod init = new JavaMethod("init");
 		init.add(new JavaAnnotation(new JavaClass(
 				"javax.annotation.PostConstruct")));
+
+		final Set<JavaClass> entities = new HashSet<>();
+		for (final JavaClass entity : project.getJavaModel().getClasses(
+				"entity")) {
+			if (project.getProject().getDomainModel().getMasterDataClasses()
+					.contains(entity.getModel())) {
+				entities.add(new JavaClass(entity));
+				datasourceActivator.addUsedClass(entity);
+			}
+		}
 		init.setContentProvider(new ContentProvider() {
 
 			@Override
 			public String getContent() {
 				final StringBuilder code = new StringBuilder();
-				for (final JavaClass jc : project.getJavaModel().getClasses(
-						"entity")) {
-					if (project.getProject().getDomainModel()
-							.getMasterDataClasses().contains(jc.getModel())) {
-						code.append("initDb(")
-								.append(jc.getSourceCodeTypeName())
-								.append(".class);\n");
-					}
+				for (final JavaClass jc : entities) {
+					code.append("initDb(").append(jc.getSourceCodeTypeName())
+							.append(".class);\n");
 				}
 				return code.toString();
 			}
@@ -81,7 +89,7 @@ public class JpaModelEnhancer implements JavaModelPlugin {
 		final JavaClass clazz = JdkClass.Class.instance();
 		final JavaClass methodClass = JdkClass.Method.instance();
 		initDb.add(new JavaMethodParameter("type", clazz));
-		initDb.addUsedClass(methodClass);
+		datasourceActivator.addUsedClass(methodClass);
 		initDb.setContentProvider(new ContentProvider() {
 
 			@Override

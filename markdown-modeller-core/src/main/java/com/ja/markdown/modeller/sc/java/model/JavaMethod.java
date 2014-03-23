@@ -18,7 +18,6 @@ public class JavaMethod extends JavaBase {
 	private String content;
 	private List<JavaAnnotation> annotations = new ArrayList<>();
 	private List<JavaMethodParameter> parameters = new ArrayList<>();
-	private List<JavaClass> usedClasses = new ArrayList<>();
 
 	public String getContent() {
 		return content == null ? contentProvider.getContent() : content;
@@ -32,7 +31,4 @@ public class JavaMethod extends JavaBase {
 		parameters.add(parameter);
 	}
 
-	public void addUsedClass(final JavaClass jc) {
-		usedClasses.add(jc);
-	}
 }

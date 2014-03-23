@@ -24,6 +24,7 @@ public class JavaClass extends TextResource {
 	private final List<JavaMethod> methods = new ArrayList<>();
 	private final List<JavaMember> members = new ArrayList<>();
 	private final Set<JavaClass> imports = new HashSet<>();
+	private List<JavaClass> usedClasses = new ArrayList<>();
 	private final ModelClass model;
 	private JavaClass genericType;
 
@@ -57,9 +58,20 @@ public class JavaClass extends TextResource {
 	}
 
 	public JavaClass(final String name, final JavaClass extendsType) {
+		this(name, extendsType, null);
+	}
+
+	private JavaClass(final String name, final JavaClass extendsType,
+			final ModelClass model) {
 		setName(name);
-		this.model = null;
+		this.model = model;
 		this.extendsType = extendsType;
+	}
+
+	public JavaClass(final JavaClass entity) {
+		this(entity.getName(), entity.extendsType == null ? null
+				: new JavaClass(entity.extendsType), entity.getModel());
+
 	}
 
 	public String getPackage() {
@@ -76,6 +88,10 @@ public class JavaClass extends TextResource {
 
 	public void add(final JavaMethod method) {
 		methods.add(method);
+	}
+
+	public void addUsedClass(final JavaClass jc) {
+		usedClasses.add(jc);
 	}
 
 	public void importClass(final JavaClass jc) {
